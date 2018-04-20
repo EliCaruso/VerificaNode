@@ -25,15 +25,23 @@ const accreditamento = () =>
 const es1 = () => 
     fetch(`${apiUrl}/esercizi/1`, {
       method: "GET",
+      //CONTROLLA BENE
       headers: {
         "x-data": true
       }
     })
     .then(res => res.json())
     .then(({ message, data }) => {
-      console.log(message)
-      console.log(data)
-      const result = data.reduce((accumulator, current) => accumulator + current, 0)
+      console.log(message);
+      console.log(data);
+
+      //FAI L'SERCIZIO
+      let result = 0;
+      for (let i=0; i<data.length; i++){
+        result+=data[i];
+      }
+      //FINE ESERCIZIO
+
       fetch(`${apiUrl}/esercizi/1`, {
         method: "POST",
         headers: {
@@ -43,28 +51,41 @@ const es1 = () =>
           data: result
         })
       })
-        .then(res => {
-            if (res.ok) {
-              console.log("SUCCESS")
-              return
-            }
-            throw new Error(res.statusText)
-        })
-        .catch(console.log) 
+      .then(res => {
+          if (res.ok) {
+            console.log("SUCCESSO. GIUSTO!");
+            return
+          }
+          throw new Error(res.statusText)
+      })
+      .catch(console.log) 
     })
 
 const es2 = () => 
     fetch(`${apiUrl}/esercizi/2`, {
+      method: "GET",
+      //CONTROLLA BENE
       headers: {
         "x-data": true
       }
     })
     .then(res => res.json())
     .then(({ message, data }) => {
-      console.log(message)
-      console.log(data)
-      const min = data.reduce((accumulator, current) => current < accumulator ? current : accumulator, data[0])
-      const result = data.map(value => value * min)
+      console.log(message);
+      console.log(data);
+
+      //FAI L'SERCIZIO
+      let result = [];
+      let min = data[0];
+      for (let i=0; i<data.length; i++){
+        if (data[i]<min) min=data[i]
+      }
+      for (let i=0; i<data.length; i++){
+        result[i] = data[i]*min;
+      }
+
+      //FINE ESERCIZIO
+
       fetch(`${apiUrl}/esercizi/2`, {
         method: "POST",
         headers: {
@@ -74,51 +95,20 @@ const es2 = () =>
           data: result
         })
       })
-        .then(res => {
-            if (res.ok) {
-              console.log("SUCCESS")
-              return res.json()
-            }
-            return res.json()
-            throw new Error(res.statusText)
-        })
-        .then(console.log)
-        .catch(console.log) 
-    })
-
-const es3 = () => 
-    fetch(`${apiUrl}/esercizi/3`, {
-      headers: {
-        "x-data": true
-      }
-    })
-    .then(res => res.json())
-    .then(({ message, data }) => {
-      console.log(message)
-      console.log(data)
-      const result = data.filter(value => value <= 3)
-      fetch(`${apiUrl}/esercizi/3`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          data: result
-        })
+      .then(res => {
+          if (res.ok) {
+            console.log("SUCCESSO. GIUSTO!");
+            return
+          }
+          throw new Error(res.statusText)
       })
-        .then(res => {
-            if (res.ok) {
-              console.log("SUCCESS")
-              return res.json()
-            }
-            return res.json()
-            throw new Error(res.statusText)
-        })
-        .then(console.log)
-        .catch(console.log) 
+      .catch(console.log) 
     })
 
-//accreditamento()
-es1()
-es2()
-es3()
+
+
+
+accreditamento()
+//es1()
+//es2()
+//es3()
