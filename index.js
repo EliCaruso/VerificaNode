@@ -105,10 +105,52 @@ const es2 = () =>
       .catch(console.log) 
     })
 
+const es3 = () => 
+    fetch(`${apiUrl}/esercizi/3`, {
+      method: "GET",
+      //CONTROLLA BENE
+      headers: {
+        "x-data": true
+      }
+    })
+    .then(res => res.json())
+    .then(({ message, data }) => {
+      console.log(message);
+      console.log(data);
 
+      //FAI L'SERCIZIO
+      //ESCLUDI TUTTI I NUMERI MAGGIORI DI 3
+      let result = [];
+      let j=0;
+      for (let i=0; i<data.length; i++){
+        if (data[i]<=3) {
+          result[j]=data[i]
+          j++
+        }
+      }
 
+      //FINE ESERCIZIO
 
-accreditamento()
+      fetch(`${apiUrl}/esercizi/3`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          data: result
+        })
+      })
+      .then(res => {
+          if (res.ok) {
+            console.log("SUCCESSO. GIUSTO!");
+            return
+          }
+          throw new Error(res.statusText)
+      })
+      .catch(console.log) 
+    })
+
+//accreditamento()
 //es1()
 //es2()
-//es3()
+es3()
